@@ -1,8 +1,7 @@
 import tweepy
 import json
 from py2neo import Graph
-from py2neo.ogm import Property, GraphObject, RelatedTo
-
+from py2neo.ogm import Property, GraphObject, RelatedTo, RelatedFrom
 
 # Twitter keys
 consumer_key = '5Xyt2JIpgCWsSboL4jqITlZCb'
@@ -14,24 +13,26 @@ access_token_secret = 'tw0PzDpTsSIbKZuGOxPqxNdCIOsxblUWfB1hCiSN8DAEi'
 graph = Graph(password='password')
 tx = graph.begin()
 
+
 # Class node
-class Tweet(GraphObject):
-    __primarykey__ = "nick"
-    text = Property()
-    nick = Property()
-    # associate_with = RelatedTo(Hastag)
-    # written_by = RelatedTo(Author)
-
-
-class Author(GraphObject):
-    __primarykey__ = "nick"
-    nick = Property()
-
 class Hastag(GraphObject):
     __primarykey__ = "name"
     name = Property()
+    tweets = RelatedFrom("Tweet", "associate_with")
 
 
+class Account(GraphObject):
+    __primarykey__ = "name"
+    name = Property()
+    tweets = RelatedFrom("Tweet", "written_by")
+
+
+class Tweet(GraphObject):
+    __primarykey__ = "nick"
+    nick = Property()
+    text = Property()
+    associate_with = RelatedTo(Hastag)
+    written_by = RelatedTo(Account)
 
 
 # This is the listener, resposible for receiving data
@@ -43,6 +44,7 @@ class StdOutListener(tweepy.StreamListener):
         tweetObject = Tweet()
         tweetObject.nick = decoded['user']['screen_name']
         tweetObject.text = decoded['text'].encode('ascii', 'ignore')
+        tweetObject.associate_with = has
 
         graph.create(tweetObject)
 
@@ -54,10 +56,10 @@ class StdOutListener(tweepy.StreamListener):
     def on_error(self, status):
         print status
 
+
 if __name__ == '__main__':
 
-
-    result = raw_input("Do you want delete the last search? (Y/N)? :")
+    result = raw_input("Do you want to delete the last search? (Y/N)? :")
 
     if (result == "Y") or (result == "y"):
         graph.delete_all()
@@ -70,15 +72,15 @@ if __name__ == '__main__':
     auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
     auth.set_access_token(access_token, access_token_secret)
 
-
     name = raw_input("Hastag to search:")
-    hastag = "#" + name
-    print "Showing all new tweets for ", hastag
+    toSearch = "#" + name
+    print "Showing all new tweets for ", toSearch
 
     # Create de node with the hastag
     has = Hastag()
-    has.name = hastag
+    has.name = toSearch
     graph.create(has)
 
+
     stream = tweepy.Stream(auth, l)
-    stream.filter(track=[hastag])
+    stream.filter(track=[toSearch])
