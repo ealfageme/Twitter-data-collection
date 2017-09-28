@@ -14,25 +14,16 @@ graph = Graph(password='password')
 tx = graph.begin()
 
 
-# Class node
-class Hastag(GraphObject):
-    __primarykey__ = "name"
-    name = Property()
-    tweets = RelatedFrom("Tweet", "associate_with")
-
 
 class Account(GraphObject):
-    __primarykey__ = "name"
+    __primarykey__ = "username"
     name = Property()
-    tweets = RelatedFrom("Tweet", "written_by")
-
-
-class Tweet(GraphObject):
-    __primarykey__ = "nick"
-    nick = Property()
-    text = Property()
-    associate_with = RelatedTo(Hastag)
-    written_by = RelatedTo(Account)
+    username = Property()
+    tweet = Property()
+    date = Property()
+    time = Property()
+    urlTweet = Property()
+    photo = Property()
 
 
 # This is the listener, resposible for receiving data
@@ -41,12 +32,16 @@ class StdOutListener(tweepy.StreamListener):
         # Twitter returns data in JSON format - we need to decode it first
         decoded = json.loads(data)
 
-        tweetObject = Tweet()
-        tweetObject.nick = decoded['user']['screen_name']
-        tweetObject.text = decoded['text'].encode('ascii', 'ignore')
-        tweetObject.associate_with = has
+        accountobject = Account()
+        accountobject.username = decoded['user']['screen_name']
+        accountobject.tweet = decoded['text'].encode('ascii', 'ignore')
+        accountobject.name = ""
+        accountobject.date = ""
+        accountobject.time = ""
+        accountobject.urlTweet = ""
+        accountobject.photo = ""
 
-        graph.create(tweetObject)
+        graph.create(accountobject)
 
         # Also, we convert UTF-8 to ASCII ignoring all bad characters sent by users
         print '@%s: %s' % (decoded['user']['screen_name'], decoded['text'].encode('ascii', 'ignore'))
@@ -76,10 +71,6 @@ if __name__ == '__main__':
     toSearch = "#" + name
     print "Showing all new tweets for ", toSearch
 
-    # Create de node with the hastag
-    has = Hastag()
-    has.name = toSearch
-    graph.create(has)
 
 
     stream = tweepy.Stream(auth, l)
