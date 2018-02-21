@@ -53,7 +53,7 @@ class StdOutListener(tweepy.StreamListener):
             accountobject.url = decoded['user']['url']
             accountobject.followers = decoded['user']['followers_count']
 
-            list_user.append = accountobject
+            list_user.append(accountobject)
             graph.create(accountobject)
 
             if not debug:
@@ -61,29 +61,37 @@ class StdOutListener(tweepy.StreamListener):
                 print "username is :" + accountobject.username
                 print "tweet is    :" + accountobject.tweet
                 print "name is     :" + accountobject.name
+            else:
+                print len(list_user)
             return True
         else:
-        # Stop the search
-            pass
+            # Stop the search
+            return False
 
     def on_error(self, status):
         print status
 
+
 def be_follow():
-    copy_list = list_user
+    copy_list = list_user[:]
     for user in list_user:
         for user2 in copy_list:
-            if check_following(user,user2):
-                create_relationship(user,user2)
+            if user.username is not user2.username:
+                if check_following(user.username, user2.username):
+                    create_relationship(user, user2)
 
 
 def check_following(user, user2):
-    # Check if user user follow to user2
-    return True
+    # True if user following to user2
+    relation = api.show_friendship(source_screen_name=user, target_screen_name=user2)
+
+    return relation[0].following
+
 
 def create_relationship(user,user2):
+    print str(user.username) + " not following to " + str(user2.username)
     # Create the relationship between the node user and the node user2
-    return True
+
 
 
 def signal_handler(signal, frame):
@@ -101,6 +109,7 @@ if __name__ == '__main__':
     l = StdOutListener()
     auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
     auth.set_access_token(access_token, access_token_secret)
+    api = tweepy.API(auth)
 
     if not debug:
         limit = raw_input("The limit of search:")
@@ -108,12 +117,11 @@ if __name__ == '__main__':
         toSearch = "#" + name
         print "Showing all new tweets for ", toSearch
     else:
-        limit = 100
-        toSearch = "#FelizLunes"
+        limit = 200
+        toSearch = "#FelizMiercoles"
 
     stream = tweepy.Stream(auth, l)
     stream.filter(track=[toSearch])
 
     be_follow()
-
 
