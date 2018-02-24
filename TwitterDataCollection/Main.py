@@ -3,7 +3,7 @@ import sys
 import signal
 import time
 import json
-from py2neo import Graph
+from py2neo import Graph, Node, Relationship
 from py2neo.ogm import Property, GraphObject
 
 # Twitter keys
@@ -20,8 +20,8 @@ debug = True
 list_user = []
 limit = 0
 timeLimit = 1  # In minutes
-# timeout = time.time() + timeLimit * 60 # 1 minute
-timeout = time.time() + 5  # 5 seconds
+timeout = time.time() + timeLimit * 60  # 1 minute
+# timeout = time.time() + 5  # 5 seconds
 
 
 class Account(GraphObject):
@@ -68,7 +68,7 @@ class StdOutListener(tweepy.StreamListener):
                 print "tweet      :" + accountobject.tweet
                 print "name       :" + accountobject.name
             else:
-                print str(len(list_user)) + ":   " + str(round((time.time() - self.time_start), 2)) + " seconds"
+                print str(len(list_user)) + ":\t\t" + str(round((time.time() - self.time_start), 2)) + " seconds"
             return True
         else:
             # Stop the search
@@ -93,13 +93,17 @@ def be_follow():
 def check_following(user, user2):
     # True if user following to user2
     relation = api.show_friendship(source_screen_name=user, target_screen_name=user2)
-
     return relation[0].following
 
 
-def create_relationship(user, user2):
-    print str(user.username) + " following to " + str(user2.username)
-    # Create the relationship between the node user and the node user2
+def create_relationship(user1, user2):
+    print str(user1.username) + " following to " + str(user2.username)
+    print "creating relationship..."
+    existing_user1 = graph.find_one('Account', property_key='username', property_value=user1.username)
+    existing_user2 = graph.find_one('Account', property_key='username', property_value=user2.username)
+    existing_u1_knows_u2 = Relationship(existing_user1, 'Follow to', existing_user2)
+    graph.create(existing_u1_knows_u2)
+    print "the relation has been created"
 
 
 def signal_handler(signal, frame):
@@ -115,20 +119,23 @@ if __name__ == '__main__':
     signal.signal(signal.SIGINT, signal_handler)
     # Main
     try:
+
         l = StdOutListener()
         auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
         auth.set_access_token(access_token, access_token_secret)
         api = tweepy.API(auth)
+
     except Exception:
         print "Error: Authentication failed"
 
     if not debug:
-        limit = raw_input("The limit of search:")
+
         name = raw_input("Hastag to search:")
         toSearch = "#" + name
         print "Showing all new tweets for ", toSearch
+
     else:
-        limit = 200
+
         toSearch = "#FelizSabado"
 
     print "Initializing stream:"

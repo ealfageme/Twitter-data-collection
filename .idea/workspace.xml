@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3de9d7be-9641-49fc-959f-5a17b38466ea" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/TwitterDataCollection/Main.py" afterPath="$PROJECT_DIR$/TwitterDataCollection/Main.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -13,7 +12,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/Twitter_data_collection$Main.coverage" NAME="Main Coverage Results" MODIFIED="1519474232055" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/TwitterDataCollection" />
+    <SUITE FILE_PATH="coverage/Twitter_data_collection$Main.coverage" NAME="Main Coverage Results" MODIFIED="1519477286169" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/TwitterDataCollection" />
   </component>
   <component name="DatabaseView">
     <option name="SHOW_INTERMEDIATE" value="true" />
@@ -33,11 +32,13 @@
       <file leaf-file-name="Main.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/TwitterDataCollection/Main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-10">
-              <caret line="70" column="48" lean-forward="false" selection-start-line="70" selection-start-column="48" selection-end-line="70" selection-end-column="48" />
+            <state relative-caret-position="362">
+              <caret line="87" column="18" lean-forward="true" selection-start-line="87" selection-start-column="18" selection-end-line="87" selection-end-column="18" />
               <folding>
                 <element signature="e#0#13#0" expanded="true" />
-                <element signature="e#738#1028#0" expanded="false" />
+                <element signature="e#3174#3326#0" expanded="false" />
+                <element signature="e#3372#3847#0" expanded="false" />
+                <element signature="e#3889#3965#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -380,7 +381,9 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager />
+    <breakpoint-manager>
+      <option name="time" value="1" />
+    </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
@@ -390,7 +393,9 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#0#13#0" expanded="true" />
-            <element signature="e#738#1028#0" expanded="false" />
+            <element signature="e#3174#3326#0" expanded="false" />
+            <element signature="e#3372#3847#0" expanded="false" />
+            <element signature="e#3889#3965#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -401,7 +406,9 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#0#13#0" expanded="true" />
-            <element signature="e#738#1028#0" expanded="false" />
+            <element signature="e#3174#3326#0" expanded="false" />
+            <element signature="e#3372#3847#0" expanded="false" />
+            <element signature="e#3889#3965#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -412,7 +419,9 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#0#13#0" expanded="true" />
-            <element signature="e#738#1028#0" expanded="false" />
+            <element signature="e#3174#3326#0" expanded="false" />
+            <element signature="e#3372#3847#0" expanded="false" />
+            <element signature="e#3889#3965#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -423,7 +432,9 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#0#13#0" expanded="true" />
-            <element signature="e#738#1028#0" expanded="false" />
+            <element signature="e#3174#3326#0" expanded="false" />
+            <element signature="e#3372#3847#0" expanded="false" />
+            <element signature="e#3889#3965#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -434,18 +445,22 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#0#13#0" expanded="true" />
-            <element signature="e#738#1028#0" expanded="false" />
+            <element signature="e#3174#3326#0" expanded="false" />
+            <element signature="e#3372#3847#0" expanded="false" />
+            <element signature="e#3889#3965#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/TwitterDataCollection/Main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-10">
-          <caret line="70" column="48" lean-forward="false" selection-start-line="70" selection-start-column="48" selection-end-line="70" selection-end-column="48" />
+        <state relative-caret-position="362">
+          <caret line="87" column="18" lean-forward="true" selection-start-line="87" selection-start-column="18" selection-end-line="87" selection-end-column="18" />
           <folding>
             <element signature="e#0#13#0" expanded="true" />
-            <element signature="e#738#1028#0" expanded="false" />
+            <element signature="e#3174#3326#0" expanded="false" />
+            <element signature="e#3372#3847#0" expanded="false" />
+            <element signature="e#3889#3965#0" expanded="false" />
           </folding>
         </state>
       </provider>
