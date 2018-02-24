@@ -1,15 +1,16 @@
 import tweepy
 import sys
 import signal
+import time
 import json
 from py2neo import Graph
 from py2neo.ogm import Property, GraphObject
 
 # Twitter keys
-consumer_key = '5Xyt2JIpgCWsSboL4jqITlZCb'
-consumer_secret = 'QdgAqnCTeChFurGOyPcGowJAZw5m6eQ14gyZpeaRFw3mQWpoEF'
-access_token = '1924437534-ZnmL5AadDja6bFBkTCfczZLIfOvVbl6iil1ieqw'
-access_token_secret = 'tw0PzDpTsSIbKZuGOxPqxNdCIOsxblUWfB1hCiSN8DAEi'
+consumer_key = 'ZMWV6z2cQq1BtROWNfkv8qHnB'
+consumer_secret = 'kQ3MtV6Fq3kRATCEZJ4jNuzkcJuOiITnSVUlMMX5isWdWZZK8E'
+access_token = '967359967723442176-smrg5oQ1rUFWBzgugSYarl1AYj91PFt'
+access_token_secret = 'bi2KVaKyJYbsdW4a506BBQk3xE3uDaLlecva63S9OuNm7'
 
 # graph instance
 graph = Graph(password='password')
@@ -18,6 +19,9 @@ tx = graph.begin()
 debug = True
 list_user = []
 limit = 0
+timeLimit = 1  # In minutes
+# timeout = time.time() + timeLimit * 60 # 1 minute
+timeout = time.time() + 5  # 5 seconds
 
 
 class Account(GraphObject):
@@ -36,8 +40,10 @@ class Account(GraphObject):
 
 # This is the listener, resposible for receiving data
 class StdOutListener(tweepy.StreamListener):
+    time_start = time.time()
+
     def on_data(self, data):
-        if len(list_user) < limit:
+        if time.time() < timeout:
             # Twitter returns data in JSON format - we need to decode it first
             decoded = json.loads(data)
 
@@ -58,14 +64,15 @@ class StdOutListener(tweepy.StreamListener):
 
             if not debug:
                 print "----------------------------------------------------"
-                print "username is :" + accountobject.username
-                print "tweet is    :" + accountobject.tweet
-                print "name is     :" + accountobject.name
+                print "username   :" + accountobject.username
+                print "tweet      :" + accountobject.tweet
+                print "name       :" + accountobject.name
             else:
-                print len(list_user)
+                print str(len(list_user)) + ":   " + str(round((time.time() - self.time_start), 2)) + " seconds"
             return True
         else:
             # Stop the search
+            print "TIMEOUT: The search has been finished"
             return False
 
     def on_error(self, status):
@@ -73,12 +80,14 @@ class StdOutListener(tweepy.StreamListener):
 
 
 def be_follow():
+    print "Checking friendship..."
     copy_list = list_user[:]
     for user in list_user:
         for user2 in copy_list:
             if user.username is not user2.username:
                 if check_following(user.username, user2.username):
                     create_relationship(user, user2)
+    print "End of search of friendship"
 
 
 def check_following(user, user2):
@@ -88,10 +97,9 @@ def check_following(user, user2):
     return relation[0].following
 
 
-def create_relationship(user,user2):
-    print str(user.username) + " not following to " + str(user2.username)
+def create_relationship(user, user2):
+    print str(user.username) + " following to " + str(user2.username)
     # Create the relationship between the node user and the node user2
-
 
 
 def signal_handler(signal, frame):
@@ -102,14 +110,17 @@ def signal_handler(signal, frame):
 
 if __name__ == '__main__':
 
+    print 'The last graph has been deleted'
     graph.delete_all()
-    print 'The last search has been deleted'
     signal.signal(signal.SIGINT, signal_handler)
     # Main
-    l = StdOutListener()
-    auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
-    auth.set_access_token(access_token, access_token_secret)
-    api = tweepy.API(auth)
+    try:
+        l = StdOutListener()
+        auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+        auth.set_access_token(access_token, access_token_secret)
+        api = tweepy.API(auth)
+    except Exception:
+        print "Error: Authentication failed"
 
     if not debug:
         limit = raw_input("The limit of search:")
@@ -118,8 +129,9 @@ if __name__ == '__main__':
         print "Showing all new tweets for ", toSearch
     else:
         limit = 200
-        toSearch = "#FelizMiercoles"
+        toSearch = "#FelizSabado"
 
+    print "Initializing stream:"
     stream = tweepy.Stream(auth, l)
     stream.filter(track=[toSearch])
 
