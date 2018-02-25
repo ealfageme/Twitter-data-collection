@@ -7,21 +7,20 @@ from py2neo import Graph, Node, Relationship
 from py2neo.ogm import Property, GraphObject
 
 # Twitter keys
-consumer_key = 'ZMWV6z2cQq1BtROWNfkv8qHnB'
-consumer_secret = 'kQ3MtV6Fq3kRATCEZJ4jNuzkcJuOiITnSVUlMMX5isWdWZZK8E'
-access_token = '967359967723442176-smrg5oQ1rUFWBzgugSYarl1AYj91PFt'
-access_token_secret = 'bi2KVaKyJYbsdW4a506BBQk3xE3uDaLlecva63S9OuNm7'
+consumer_key = '5Xyt2JIpgCWsSboL4jqITlZCb'
+consumer_secret = 'QdgAqnCTeChFurGOyPcGowJAZw5m6eQ14gyZpeaRFw3mQWpoEF'
+access_token = '1924437534-ZnmL5AadDja6bFBkTCfczZLIfOvVbl6iil1ieqw'
+access_token_secret = 'tw0PzDpTsSIbKZuGOxPqxNdCIOsxblUWfB1hCiSN8DAEi'
 
 # graph instance
 graph = Graph(password='password')
 tx = graph.begin()
+api = ""
 # Mode debug don't necessary to introduce the hastag and print the search
-debug = True
+debug = False
 list_user = []
-limit = 0
 timeLimit = 1  # In minutes
 timeout = time.time() + timeLimit * 60  # 1 minute
-# timeout = time.time() + 5  # 5 seconds
 
 
 class Account(GraphObject):
@@ -62,17 +61,14 @@ class StdOutListener(tweepy.StreamListener):
             list_user.append(accountobject)
             graph.create(accountobject)
 
-            if not debug:
-                print "----------------------------------------------------"
-                print "username   :" + accountobject.username
-                print "tweet      :" + accountobject.tweet
-                print "name       :" + accountobject.name
-            else:
-                print str(len(list_user)) + ":\t\t" + str(round((time.time() - self.time_start), 2)) + " seconds"
+            print str(len(list_user)) + ":\t" + str(round((time.time() - self.time_start), 2)) + " seconds"\
+                  + ":\t\t" + accountobject.username
+
             return True
         else:
             # Stop the search
-            print "TIMEOUT: The search has been finished"
+            print "TIMEOUT: "+ str(round((time.time() - self.time_start), 2)) + \
+                  " The search has been finished"
             return False
 
     def on_error(self, status):
@@ -80,7 +76,6 @@ class StdOutListener(tweepy.StreamListener):
 
 
 def be_follow():
-    print "Checking friendship..."
     copy_list = list_user[:]
     for user in list_user:
         for user2 in copy_list:
@@ -103,7 +98,6 @@ def create_relationship(user1, user2):
     existing_user2 = graph.find_one('Account', property_key='username', property_value=user2.username)
     existing_u1_knows_u2 = Relationship(existing_user1, 'Follow to', existing_user2)
     graph.create(existing_u1_knows_u2)
-    print "the relation has been created"
 
 
 def signal_handler(signal, frame):
@@ -112,19 +106,13 @@ def signal_handler(signal, frame):
     sys.exit(0)
 
 
-if __name__ == '__main__':
-
-    print 'The last graph has been deleted'
-    graph.delete_all()
-    signal.signal(signal.SIGINT, signal_handler)
-    # Main
+def start_app():
+    global api
     try:
-
         l = StdOutListener()
         auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
         auth.set_access_token(access_token, access_token_secret)
         api = tweepy.API(auth)
-
     except Exception:
         print "Error: Authentication failed"
 
@@ -133,7 +121,6 @@ if __name__ == '__main__':
         name = raw_input("Hastag to search:")
         toSearch = "#" + name
         print "Showing all new tweets for ", toSearch
-
     else:
 
         toSearch = "#FelizSabado"
@@ -142,5 +129,21 @@ if __name__ == '__main__':
     stream = tweepy.Stream(auth, l)
     stream.filter(track=[toSearch])
 
+if __name__ == '__main__':
+
+    print "The last graph has been deleted"
+    graph.delete_all()
+    print "Press Ctrl + C to cancel the application"
+    signal.signal(signal.SIGINT, signal_handler)
+    print "START the application"
+    start_app()
+    print "Checking friendship..."
     be_follow()
+
+    print "END"
+
+
+
+
+
 
