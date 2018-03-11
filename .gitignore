@@ -1,2 +1,6 @@
 .idea/*
+.idea/workspace.xml
 account
+Account.py
+Account.pyc
+
