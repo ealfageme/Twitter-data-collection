@@ -86,11 +86,12 @@ def change_credentials():
 
 def create_relationship(user1, user2):
     print str(user1.username) + " following to " + str(user2.username)
-    print "creating relationship..."
+    print "creating relationship...     ",
     existing_user1 = graph.find_one('Account', property_key='username', property_value=user1.username)
     existing_user2 = graph.find_one('Account', property_key='username', property_value=user2.username)
     existing_u1_knows_u2 = Relationship(existing_user1, 'Follow to', existing_user2)
     graph.create(existing_u1_knows_u2)
+    print "[DONE]"
 
 
 def signal_handler(signal, frame):
@@ -122,10 +123,10 @@ def start_app():
 
     print "Initializing stream:"
     stream = tweepy.Stream(auth, l)
-    # try:
-    stream.filter(track=[to_search])
-    # except:
-    #     print to_search
+    try:
+        stream.filter(track=[to_search])
+    except:
+        print to_search
 
 if __name__ == '__main__':
     print "The last graph has been deleted"
@@ -137,6 +138,4 @@ if __name__ == '__main__':
     print "Checking friendship..."
     be_follow()
 
-    print "END"
-
-
+    print 'END'
