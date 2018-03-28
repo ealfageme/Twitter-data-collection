@@ -14,10 +14,15 @@ timeout = time.time() + timeLimit * 20  # 1 minute
 
 
 class StdOutListener(tweepy.StreamListener):
-    time_start = time.time()
+    # time_start = time.time()
+
+    def __init__(self, time):
+        self.time_start = time
+        self.time_out = self.time_start + 20
 
     def on_data(self, data):
-        if time.time() < timeout:
+
+        if time.time() < self.time_out:
             # Twitter returns data in JSON format - we need to decode it first
             decoded = json.loads(data)
 
@@ -36,13 +41,13 @@ class StdOutListener(tweepy.StreamListener):
             list_user.append(accountobject)
             graph.create(accountobject)
 
-            print str(len(list_user)) + ":\t" + str(round((time.time() - self.time_start), 2)) \
+            print "[APP] " + str(len(list_user)) + ":\t" + str(round((time.time() - self.time_start), 2)) \
                                         + " seconds" + ":\t\t" + accountobject.username
 
             return True
         else:
             # Stop the search
-            print "TIMEOUT: " + str(round((time.time() - self.time_start), 2)) + \
+            print "[APP] " + "TIMEOUT: " + str(round((time.time() - self.time_start), 2)) + \
                   " The search has been finished"
             return False
 
@@ -51,14 +56,14 @@ class StdOutListener(tweepy.StreamListener):
 
 
 def be_follow():
-    print "there are ", len(list_user), "users"
+    print "[APP] " + "there are ", len(list_user), "users"
     copy_list = list_user[:]
     for user in list_user:
         for user2 in copy_list:
             if user.username is not user2.username:
                 if check_following(user.username, user2.username):
                     create_relationship(user, user2)
-    print "End of search of friendship"
+    print "[APP] " + "End of search of friendship"
 
 
 def check_following(user, user2):
@@ -80,18 +85,19 @@ def change_credentials():
 
 
 def create_relationship(user1, user2):
-    print str(user1.username) + " following to " + str(user2.username)
-    print "creating relationship...     ",
+    print "[APP] " + str(user1.username) + " following to " + str(user2.username)
+    print "[APP] " + "creating relationship...     ",
     existing_user1 = graph.find_one('Account', property_key='username', property_value=user1.username)
     existing_user2 = graph.find_one('Account', property_key='username', property_value=user2.username)
     existing_u1_knows_u2 = Relationship(existing_user1, 'Follow to', existing_user2)
     graph.create(existing_u1_knows_u2)
-    print "[DONE]"
+    print "[APP] " + "[DONE]"
 
 
 def start_app(hastag):
     global api
-    l = StdOutListener()
+    time_start = time.time()
+    l = StdOutListener(time_start)
     # try:
     credentials = get_next_credentials()
     auth = tweepy.OAuthHandler(credentials[0], credentials[1])
@@ -99,8 +105,8 @@ def start_app(hastag):
     api = tweepy.API(auth)
 
     to_search = "#" + hastag
-    print "Showing all new tweets for ", to_search
-    print "Initializing stream:"
+    print "[APP] " + "Showing all new tweets for ", to_search
+    print "[APP] " + "Initializing stream:"
     stream = tweepy.Stream(auth, l)
     stream.filter(track=[to_search])
 
@@ -111,11 +117,10 @@ def get_all_node():
 
 
 def main(hastag):
-    print "The last graph has been deleted"
+    print "[APP] " + "The last graph has been deleted"
     graph.delete_all()
-    print "START the application"
+    print "[APP] " + "START the application"
     start_app(hastag)
-    print "Checking friendship..."
+    print "[APP] " + "Checking friendship..."
     be_follow()
-
-    print 'END'
+    print "[APP] " + 'END'

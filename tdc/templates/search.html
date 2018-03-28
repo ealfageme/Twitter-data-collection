@@ -23,14 +23,20 @@
             nodes:[],
             links:[]
          };
+         var session;
         function connect(){
             const host = 'bolt://localhost';
             const driver = neo4j.v1.driver(host, neo4j.v1.auth.basic("neo4j", "password"));
-            const session = driver.session();
+            session = driver.session();
+            requestNodes(session);
+            return session;
+        }
+
+        function requestNodes(session){
             const all_nodes = 'Match(n:Account) return n.username';
             const all_relationship = 'MATCH (a:Account)-[r:`Follow to`]->(b:Account) RETURN a.username,b.username'
-            const width = 1400; //document.getElementById('canvas').clientWidth;
-            const height = 700; //document.getElementById('canvas').clientHeight;
+            const width = 1400;
+            const height = 700;
             session.run(all_nodes).then((result) => {
               // Close the neo4j session
               session.close();
@@ -62,14 +68,11 @@
             });
             return true;
         }
-
         function filling(){
 
             var canvas = d3.select("#network"),
                 width = canvas.attr("width"),
                 height = canvas.attr("height"),
-//                width = 800, // document.getElementById('network').clientWidth,
-//                height = 450, //document.getElementById('network').clientHeight,
                 ctx = canvas.node().getContext("2d"),
                 r = 15,
                 color = d3.scaleOrdinal(d3.schemeCategory20),
@@ -89,7 +92,6 @@
 
             function update() {
                 ctx.clearRect(0,0,width,height);
-
                 ctx.beginPath();
             //    ctx.globalAlpha = 0.5;
                 ctx.strokeStyle = "#766b70";
@@ -144,6 +146,8 @@
             }
         }
         connect()
+        setInterval('filling()',5000);
+
         </script>
 
     </body>
