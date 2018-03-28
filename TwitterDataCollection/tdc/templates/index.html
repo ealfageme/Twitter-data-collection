@@ -1,0 +1,38 @@
+{% load staticfiles %}
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Twitter</title>
+
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/index.css' %}">
+
+
+</head>
+
+<body>
+    <div class = "windows">
+        <div class = "top">
+            <div class = "title">
+                <h1>Twitter Data Collection</h1>
+            </div>
+        </div>
+        <div class = "bottom">
+            <div class = "btn">
+
+
+            <form method="POST">
+                {% csrf_token %}
+                {{form.as_p}}
+
+                <input type="submit" value="start" />
+            </form>
+            </div>
+        </div>
+    </div>
+
+
+</body>
+</html>

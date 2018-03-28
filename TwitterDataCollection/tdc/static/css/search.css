@@ -1,0 +1,41 @@
+body{
+    background-color: #242424;
+}
+.windows .top h1 a{
+    font-family: 'Lobster';
+    color: #FCA205;
+}
+.windows .top{
+    width:100%;
+    height: 15%;
+}
+.windows .top .hastag {
+    height: 100%;
+    width: 50%;
+    float: left
+}
+.windows .top .hastag #hastag{
+    margin-left: 57%;
+    margin-top:4%;
+    width: 40%;
+    height: 30%;
+}
+.windows .top .search{
+    height: 100%;
+    width: 50%;
+    float:right;
+}
+
+
+.windows .bottom{
+    width: 100%;
+    height: 85%;
+}
+
+canvas{
+    /*background-color: #525357;*/
+    /*width: 98%;*/
+    /*height: 98%;*/
+    margin-left: 1%;
+    margin-top:1%;
+}
