@@ -10,7 +10,7 @@ tx = graph.begin()
 api = ""
 list_user = []
 timeLimit = 1  # In minutes
-timeout = time.time() + timeLimit * 20  # 1 minute
+timeout = time.time() + timeLimit*60
 
 
 class StdOutListener(tweepy.StreamListener):
@@ -18,7 +18,7 @@ class StdOutListener(tweepy.StreamListener):
 
     def __init__(self, time):
         self.time_start = time
-        self.time_out = self.time_start + 20
+        self.time_out = self.time_start + timeLimit*10
 
     def on_data(self, data):
 
@@ -94,8 +94,11 @@ def create_relationship(user1, user2):
     print "[APP] " + "[DONE]"
 
 
-def start_app(hastag):
+def start_app(hastag, minutes):
     global api
+    global timeLimit
+    timeLimit = int(minutes)
+    # timeLimit = int(time)
     time_start = time.time()
     l = StdOutListener(time_start)
     # try:
@@ -112,15 +115,14 @@ def start_app(hastag):
 
 
 def get_all_node():
-    k = graph.data("Match(n:Account) return n.username")
-    return k
+    return graph.data("Match(n:Account) return n.username")
 
 
-def main(hastag):
+def main(hastag, minutes):
     print "[APP] " + "The last graph has been deleted"
     graph.delete_all()
     print "[APP] " + "START the application"
-    start_app(hastag)
+    start_app(hastag, minutes)
     print "[APP] " + "Checking friendship..."
     be_follow()
     print "[APP] " + 'END'

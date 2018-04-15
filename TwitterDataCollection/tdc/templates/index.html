@@ -25,9 +25,13 @@
 
             <form method="POST">
                 {% csrf_token %}
-                {{form.as_p}}
-
-                <input type="submit" value="start" />
+                {{form.has}}
+                {{form.time}}
+                <div class="inputDivRange">
+                    <div id="valueRange"></div>
+                    <input id="inputR" type="range" value="1" min="0" max="100" autocomplete="off">
+                </div>
+                <input type="submit" value="Start" />
             </form>
             </div>
         </div>
@@ -35,4 +39,23 @@
 
 
 </body>
+
+<script>
+
+
+    var elInput = document.querySelector('#inputR');
+    var time = document.querySelector('#id_time');
+    if (elInput) {
+            var valueRange = document.querySelector('#valueRange');
+            if (valueRange) {
+                valueRange.innerHTML = elInput.value;
+                time.value = elInput.value;
+                elInput.addEventListener('input', function() {
+                valueRange.innerHTML = elInput.value;
+                time.value = elInput.value;
+            }, false);
+        }
+    }
+</script>
 </html>
+

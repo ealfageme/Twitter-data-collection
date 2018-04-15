@@ -39,3 +39,36 @@ canvas{
     margin-left: 1%;
     margin-top:1%;
 }
+
+#info{
+    background:#FCA205;
+    width: 25%;
+    height: 18%;
+    position: absolute;
+    top: 1%;
+    right: 0.5%;
+    font-family:'Open Sans';
+    font-size: 130%;
+    visibility: hidden;
+
+}
+div#header{
+    height:25%;
+    margin-left:6%;
+}
+
+div#containsInfo{
+    height:75%;
+    margin-left:20%;
+}
+div#containsInfo#user{
+    margin-left:7%;
+}
+div#closeInfo{
+    width:8%;
+    height:100%;
+    float: right;
+}
+div#containsInfo#username{
+    margin-left:40%;
+}
