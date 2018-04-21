@@ -41,9 +41,10 @@ canvas{
 }
 
 #info{
-    background:#FCA205;
+    background: #d9e2e6;
     width: 25%;
-    height: 18%;
+    border-radius:15px;
+    height: 98%;
     position: absolute;
     top: 1%;
     right: 0.5%;
@@ -53,13 +54,18 @@ canvas{
 
 }
 div#header{
-    height:25%;
+    height:5%;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    background-color: #FCA205;
+}
+div#header span{
     margin-left:6%;
 }
 
 div#containsInfo{
     height:75%;
-    margin-left:20%;
+    margin-left:5%;
 }
 div#containsInfo#user{
     margin-left:7%;
@@ -71,4 +77,14 @@ div#closeInfo{
 }
 div#containsInfo#username{
     margin-left:40%;
+}
+div#profilePhoto img{
+    width: 30%;
+    margin-left: 30%;
+    margin-top: 5%;
+    margin-bottom: 5%;
+}
+hr {
+
+    border-top: 1px solid #4d4d4d;
 }

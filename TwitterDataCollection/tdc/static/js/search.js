@@ -14,7 +14,7 @@ function connect(){
 }
 
 function requestNodes(session){
-    const all_nodes = 'Match(n:Account) return n.username';
+    const all_nodes = 'Match(n:Account) return n';
     const all_relationship = 'MATCH (a:Account)-[r:`Follow to`]->(b:Account) RETURN a.username,b.username'
     const width = 1400;
     const height = 700;
@@ -25,7 +25,18 @@ function requestNodes(session){
           graph.nodes = [];
           for (var i in result.records) {
               var node = {};
-              node.username = result.records[i]._fields
+              console.log(result);
+              node.username = result.records[i]._fields[0].properties.username;
+              node.name = result.records[i]._fields[0].properties.name;
+              node.profile_image_url = result.records[i]._fields[0].properties.profile_image_url;
+              node.tweet = result.records[i]._fields[0].properties.tweet;
+              node.verified =result.records[i]._fields[0].properties.verified;
+              node.time = result.records[i]._fields[0].properties.created_at;
+              node.location = result.records[i]._fields[0].properties.location;
+              node.followers = result.records[i]._fields[0].properties.followers.low;
+              node.description = result.records[i]._fields[0].description;
+              node.id_twitter = result.records[i]._fields[0].properties.id_twitter.low;
+              node.url = "";
               node.x = Math.random() * width;
               node.y = Math.random() * height;
               graph.nodes.push(node);
@@ -111,11 +122,14 @@ function filling(){
       if (!d3.event.active) simulation.alphaTarget(0.3).restart();
       d3.event.subject.fx = d3.event.subject.x;
       d3.event.subject.fy = d3.event.subject.y;
-      console.log(d3.event.subject.username[0]);
+      var u = d3.event.subject;
+      console.log(u);
       var username = document.getElementById("username");
       var info = document.getElementById("info");
       info.style.visibility="visible";
-      username.innerHTML = d3.event.subject.username;
+      fill_user(u.username,u.name,u.profile_image_url,u.tweet,
+          u.verified,u.time,u.location,u.followers, u.id_twitter,u.url);
+
 
     }
 
@@ -149,9 +163,45 @@ function closeInfo() {
 
 
 }
+function fill_user(username,
+                   name,
+                   profile_image_url,
+                   tweet,
+                   verified,
+                   time,
+                   location,
+                   followers,
+                   description,
+                   id_twitter,
+                   url){
 
+    var usernameA = document.getElementById("usernameP");
+    var nameA = document.getElementById("nameP");
+    var img = document.getElementById("imgP");
+    var tweetA = document.getElementById("tweetP");
+    var verifiedA = document.getElementById("verifiedP");
+    var timeA = document.getElementById("timeP");
+    var locationA = document.getElementById("locationP");
+    var followersA = document.getElementById("followersP");
+    var descriptionA = document.getElementById("description");
+    var id = document.getElementById("id_twitter");
+    var urlA = document.getElementById("url");
+     usernameA.innerHTML = "Username: " + username;
+     nameA.innerHTML = "Name: " + name;
+     tweetA.innerHTML = "Tweet: " + tweet;
+     verifiedA.innerHTML = "Verified: " + verified;
+     timeA.innerHTML = "Time: " + time;
+     locationA.innerHTML = "Location: " + location;
+     followersA.innerHTML = "Followers: " + followers + " followers.";
+     descriptionA.innerHTML = "Description: " + description;
+     img.src = profile_image_url;
+
+
+
+
+}
 
 connect()
-filling();
+// filling();
 setInterval('filling()',1000);
 //  setInterval('requestNodes(session)',2000);

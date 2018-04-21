@@ -3,7 +3,7 @@ import json
 import time
 
 from py2neo import Graph, Relationship
-from Account import get_next_credentials, Account
+from Account import get_next_credentials, Account, initial_credentials
 
 graph = Graph(password='password')
 tx = graph.begin()
@@ -37,6 +37,7 @@ class StdOutListener(tweepy.StreamListener):
             accountobject.verified = decoded['user']['verified']
             accountobject.url = decoded['user']['url']
             accountobject.followers = decoded['user']['followers_count']
+            accountobject.created_at = decoded['created_at']
 
             list_user.append(accountobject)
             graph.create(accountobject)
@@ -70,7 +71,7 @@ def check_following(user, user2):
     # True if user following to user2
     try:
         relation = api.show_friendship(source_screen_name=user, target_screen_name=user2)
-    except tweepy.error.RateLimitError:
+    except tweepy.RateLimitError:
         change_credentials()
         relation = api.show_friendship(source_screen_name=user, target_screen_name=user2)
     return relation[0].following
@@ -102,20 +103,24 @@ def start_app(hastag, minutes):
     time_start = time.time()
     l = StdOutListener(time_start)
     # try:
-    credentials = get_next_credentials()
+    credentials = initial_credentials()
     auth = tweepy.OAuthHandler(credentials[0], credentials[1])
     auth.set_access_token(credentials[2], credentials[3])
-    api = tweepy.API(auth)
+    try:
+        api = tweepy.API(auth)
+    except tweepy.error.RateLimitError:
+        change_credentials()
+        api = tweepy.API(auth)
 
     to_search = "#" + hastag
     print "[APP] " + "Showing all new tweets for ", to_search
     print "[APP] " + "Initializing stream:"
     stream = tweepy.Stream(auth, l)
-    stream.filter(track=[to_search])
+    stream.filter(track=[hastag])
 
 
 def get_all_node():
-    return graph.data("Match(n:Account) return n.username")
+    return graph.data("Match(n:Account) return n")
 
 
 def main(hastag, minutes):
