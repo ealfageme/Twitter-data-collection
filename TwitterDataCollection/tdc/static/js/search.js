@@ -25,7 +25,6 @@ function requestNodes(session){
           graph.nodes = [];
           for (var i in result.records) {
               var node = {};
-              console.log(result);
               node.username = result.records[i]._fields[0].properties.username;
               node.name = result.records[i]._fields[0].properties.name;
               node.profile_image_url = result.records[i]._fields[0].properties.profile_image_url;
@@ -49,14 +48,14 @@ function requestNodes(session){
     session.run(all_relationship).then((result) => {
       // Close the neo4j session
       session.close();
-      if (result.records.length < graph.length) {
+      if (result.records.length > graph.links.length) {
           graph.links = [];
+
           for (var i in result.records) {
               var link = {};
               link.source = result.records[i]._fields[0];
               link.target = result.records[i]._fields[1];
               graph.links.push(link);
-              //    console.log(result.records[i]._fields);
           }
       }
       // console.log('Response from Neo4j:', JSON.stringify(result, null, 2));
@@ -72,7 +71,7 @@ function filling(){
         height = canvas.attr("height"),
         ctx = canvas.node().getContext("2d"),
         r = 15,
-        color = d3.scaleOrdinal(d3.schemeCategory20),
+        // color = d3.scaleOrdinal(d3.schemeCategory20),
         simulation = d3.forceSimulation()
             .force("x", d3.forceX(width/2))
             .force("y", d3.forceY(height/2))
@@ -184,16 +183,17 @@ function fill_user(username,
     var locationA = document.getElementById("locationP");
     var followersA = document.getElementById("followersP");
     var descriptionA = document.getElementById("description");
-    var id = document.getElementById("id_twitter");
+    var id = document.getElementById("profile_idP");
     var urlA = document.getElementById("url");
-     usernameA.innerHTML = "Username: " + username;
-     nameA.innerHTML = "Name: " + name;
-     tweetA.innerHTML = "Tweet: " + tweet;
-     verifiedA.innerHTML = "Verified: " + verified;
-     timeA.innerHTML = "Time: " + time;
-     locationA.innerHTML = "Location: " + location;
-     followersA.innerHTML = "Followers: " + followers + " followers.";
-     descriptionA.innerHTML = "Description: " + description;
+     usernameA.innerHTML = "<b>Username:</b> " + username;
+     nameA.innerHTML = "<b>Name:</b> " + name;
+     tweetA.innerHTML = "<b>Tweet:</b> " + tweet;
+     verifiedA.innerHTML = "<b>Verified:</b> " + verified;
+     timeA.innerHTML = "<b>Time:</b> " + time;
+     id.innerHTML = "<b>id:</b> " + id_twitter;
+     locationA.innerHTML = "<b>Location:</b> " + location;
+     followersA.innerHTML = "<b>Followers:</b> " + followers + " followers.";
+     descriptionA.innerHTML = "<b>Description:</b> " + description;
      img.src = profile_image_url;
 
 

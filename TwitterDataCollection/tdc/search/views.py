@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 from django.shortcuts import render, redirect
 from .forms import hastag
-import Main
+import neo4j as n
 import thread
 
 
@@ -14,7 +14,8 @@ def index(request):
         has = data.get("has")
         time = data.get("time")
         print has,": ", time," minutes"
-        thread.start_new(Main.main, (has, time))
+        x = n.neo4j()
+        thread.start_new(x.main, (has, time))
         return redirect('go_search')
     return render(request, "index.html", {"form": form})
 
