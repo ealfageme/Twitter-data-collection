@@ -40,6 +40,7 @@ function requestNodes(session){
               node.y = Math.random() * height;
               graph.nodes.push(node);
           }
+          filling();
       }
     }).catch( (error) => {
       console.error(error);
@@ -57,6 +58,7 @@ function requestNodes(session){
               link.target = result.records[i]._fields[1];
               graph.links.push(link);
           }
+           filling();
       }
       // console.log('Response from Neo4j:', JSON.stringify(result, null, 2));
     }).catch( (error) => {
@@ -202,6 +204,6 @@ function fill_user(username,
 }
 
 connect()
-// filling();
-setInterval('filling()',1000);
+filling();
+// setInterval('filling()',1000);
 //  setInterval('requestNodes(session)',2000);
