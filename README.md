@@ -1,7 +1,6 @@
 ![tdc Logo](/src/tdc.png)
 
 
-# Twitter data collection
 This project is a aplication that allows you to read information on Twitter in real time. 
 From a #hashtag, you can see all the users who have written a tweet with that hashtag and see the relationships between those different users.
 
@@ -17,7 +16,8 @@ This project is part to the final degree project of software Engineering in Univ
   * Python 2.7.14 or higher
   * Neo4j 3.2.2 or higher
   
- * __Tecnhologies:__
+* __Tecnhologies:__
+  * 
   * Django Framework
   * Neo4j
   * Tweepy Library
@@ -26,13 +26,13 @@ This project is part to the final degree project of software Engineering in Univ
 ## How I run the project
  * Downoload the project using 
    ```
-   git clone 
+   git clone https://github.com/ealfageme/Twitter-data-collection.git
    ```
- * Launch the database using
+ * Launch the database
  ```
  ./bin/neo4j start
  ```
- to stop:
+   * to stop:
  ```
  ./bin/neo4j stop
  ```
