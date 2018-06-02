@@ -29,17 +29,17 @@ This project is part to the final degree project of software Engineering in Univ
    git clone https://github.com/ealfageme/Twitter-data-collection.git
    ```
  * Launch the database
- ```
- ./bin/neo4j start
- ```
+   ```
+   ./bin/neo4j start
+   ```
    * to stop:
- ```
- ./bin/neo4j stop
- ```
+   ```
+   ./bin/neo4j stop
+   ```
  * Launch the app:
- ```
-  python manage.py runserver
- ```
+   ```
+    python manage.py runserver
+   ```
  ## Example of use
  ![home](/src/index.png)
  ![graph](/src/grafo1.png)
